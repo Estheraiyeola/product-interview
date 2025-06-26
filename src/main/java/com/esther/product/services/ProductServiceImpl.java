@@ -13,6 +13,8 @@ import com.esther.product.utils.Mapper;
 
 import lombok.AllArgsConstructor;
 
+import static com.esther.product.utils.Mapper.mapSavedProductToResponse;
+
 @Service
 @AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
@@ -24,20 +26,13 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public CreatedProductResponse createProduct(CreateProductRequest createProductRequest){
 
-
-
         Product newProduct = Mapper.mapProductRequestToObject(createProductRequest);
-
         Product savedProduct = productRepository.save(newProduct);
-
         productCache.eachProduct.put(newProduct.getId().toString(), newProduct);
-
-
-        CreatedProductResponse response = new CreatedProductResponse();
-        response.setProduct(savedProduct);
-        response.setMessage("Product Created");
-        return response;
+        return mapSavedProductToResponse(savedProduct);
     }
+
+
 
     //Get all product
     @Override
